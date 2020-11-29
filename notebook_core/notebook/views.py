@@ -12,32 +12,6 @@ from .models import (
 )
 
 
-# class NoteBookView(viewsets.ModelViewSet):
-#     """
-#     View to list all NoteBooks in DB.
-#     """
-#     queryset = NoteBook.objects.all()
-#     serializer_class = NoteBookSerializesr
-#     # permission_classes = [permissions.IsAuthenticated]
-
-
-class NoteView(viewsets.ModelViewSet):
-    """
-    View to list of notes in notebook
-    """
-    queryset = Note.objects.all()
-    serializer_class = NoteSerializer
-
-    @action(detail=False, methods=["GET"])
-    def get_notes(self, request, pk=None):
-        notes = Note.objects.get(id=1)
-        serializer = NoteSerializer(data=notes, many=True)
-        if serializer.is_valid():
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
 class NoteBookListView(views.APIView):
     def get(self, request):
         notebooks = NoteBook.objects.all()
@@ -62,10 +36,16 @@ class NoteBookDetailView(views.APIView):
     def get(self, request, pk=None):
         notebook = self._try_get_notebook(pk)
         serializer = NoteBookSerializer(notebook)
-        data = {
-            "number of notes": Note.objects.filter(notebook__id=pk).count()
-        }
+        # data = {
+        #     "number of notes": Note.objects.filter(notebook__id=pk).count()
+        # }
         return Response(serializer.data)
+    
+    def put(self, request, pk):
+        pass
+
+    def delete(self, request, pk):
+        pass
 
 
 class NoteListView(views.APIView):
@@ -74,7 +54,27 @@ class NoteListView(views.APIView):
         serializer = NoteSerializer(notes, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = NoteSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class NoteDetailView(views.APIView):
-    pass
+    def _try_get_note(self, pk):
+        try:
+            return Note.objects.get(pk=pk)
+        except Note.DoesNotExist:
+            raise Http404
 
+    def get(self, request, pk):
+        note = self._try_get_note(pk)
+        serializer = NoteSerializer(note)
+        return Response(serializers.data)
+
+    def put(self, request):
+        pass
+
+    def delete(self, request):
+        pass

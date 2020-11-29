@@ -4,17 +4,13 @@ from .views import (
     NoteBookListView,
     NoteBookDetailView,
     NoteListView,
-    NoteView,
+    NoteDetailView,
 )
 
-router = routers.DefaultRouter()
-router.register("note", NoteView)
 
 urlpatterns = [
-    path("notebooks/", NoteBookListView.as_view()),
-    path("notebook/<int:pk>/", NoteBookDetailView.as_view()),
+    path("notebooks/", NoteBookListView.as_view(), name="notebook_list_url"),
+    path("notebook/<int:pk>/", NoteBookDetailView.as_view(), name="notebook_detail_url"),
     path("notebook/<int:pk>/notes/", NoteListView.as_view()),
+    path("note/<int:pk>", NoteDetailView.as_view()),
 ]
-
-
-urlpatterns += router.urls
