@@ -47,10 +47,17 @@ class NoteBookDetailView(views.APIView):
         return Response(serializer.data)
     
     def put(self, request, pk):
-        pass
+        notebook = self._try_get_notebook(pk)
+        serializer = NoteBookSerializer(notebook, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        pass
+        notebook = self._try_get_notebook(pk)
+        notebook.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class NoteListView(views.APIView):
@@ -61,7 +68,7 @@ class NoteListView(views.APIView):
         serializer = NoteSerializer(notes, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    def post(self, request, pk):
         serializer = NoteSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
