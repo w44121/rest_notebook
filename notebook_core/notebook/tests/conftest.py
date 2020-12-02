@@ -23,4 +23,3 @@ def create_token(client):
         "password": "testpassword",
     })
     return response.data["access"]
-    
