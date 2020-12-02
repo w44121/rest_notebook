@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'notebook',
+    'user',
 ]
 
 REST_FRAMEWORK = {

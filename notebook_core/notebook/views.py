@@ -1,13 +1,11 @@
-from django.shortcuts import render
 from django.http import Http404
 from rest_framework import viewsets, status, views
 from rest_framework import permissions
-from rest_framework.decorators import action
 from rest_framework.response import Response
-from .serializers import (
+from notebook.serializers import (
     NoteSerializer, NoteBookSerializer
 )
-from .models import (
+from notebook.models import (
     Note, NoteBook,
 )
 
@@ -17,7 +15,6 @@ class NoteBookListView(views.APIView):
 
     def get(self, request):
         notebooks = NoteBook.objects.all()
-        print(request.user)
         serializer = NoteBookSerializer(notebooks, many=True)
         return Response(serializer.data)
 
@@ -38,12 +35,9 @@ class NoteBookDetailView(views.APIView):
         except NoteBook.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk=None):
+    def get(self, request, pk):
         notebook = self._try_get_notebook(pk)
         serializer = NoteBookSerializer(notebook)
-        # data = {
-        #     "number of notes": Note.objects.filter(notebook__id=pk).count()
-        # }
         return Response(serializer.data)
     
     def put(self, request, pk):
@@ -90,8 +84,15 @@ class NoteDetailView(views.APIView):
         serializer = NoteSerializer(note)
         return Response(serializers.data)
 
-    def put(self, request):
-        pass
+    def put(self, request, pk):
+        note = self._try_get_note(pk)
+        serializer = NoteSerializer(note, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request):
-        pass
+    def delete(self, request, pk):
+        note = self._try_get_note(pk)
+        note.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

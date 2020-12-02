@@ -1,3 +1,9 @@
 from django.contrib import admin
+from notebook.models import (
+    NoteBook, Note,
+)
 
-# Register your models here.
+
+models = [NoteBook, Note,]
+
+admin.site.register(models)

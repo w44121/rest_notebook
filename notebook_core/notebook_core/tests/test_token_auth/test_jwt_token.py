@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 
 @pytest.mark.django_db
-def test_jwt_token_create_user_in_db(create_user):
+def test_jwt_token_create_user_in_db(user):
     client = APIClient()
     url = reverse("token_obtain_pair")
     response = client.post(url, {
