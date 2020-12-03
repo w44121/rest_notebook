@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from user.models import User
 from rest_framework.test import APIClient
 from django.urls import reverse
 import pytest
