@@ -21,7 +21,7 @@ def user():
 
 
 @pytest.fixture()
-def create_token(client, user):
+def token(client, user):
     url = reverse("token_obtain_pair")
     response = client.post(url, {
         "username": "testuser",
