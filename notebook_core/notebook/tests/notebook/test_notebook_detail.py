@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 
 
 @pytest.fixture()
-def notebook():
-    notebook = NoteBook.objects.create(title="test_check_notebook")
+def notebook(user):
+    notebook = NoteBook.objects.create(title="test_check_notebook", author=user)
     return notebook
 
 
@@ -17,7 +17,7 @@ def test_get_detail_notebook_with_correct_jwt(client, create_token, notebook):
     url = reverse("notebook_detail_url", kwargs={"pk": notebook.pk})
     response = client.get(url)
     assert response.status_code == 200
-    assert response.data == {"id": notebook.pk, "title": "test_check_notebook"}
+    assert response.data == {"id": notebook.pk, "title": "test_check_notebook", "author": 1}
 
 
 @pytest.mark.django_db

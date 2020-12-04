@@ -14,12 +14,12 @@ class NoteBookListView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        notebooks = NoteBook.objects.all()
+        notebooks = NoteBook.objects.filter(author__id=request.user.id)
         serializer = NoteBookSerializer(notebooks, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = NoteBookSerializer(data=request.data)
+        serializer = NoteBookSerializer(data=request.data, context={"user": request.user})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -42,7 +42,7 @@ class NoteBookDetailView(views.APIView):
     
     def put(self, request, pk):
         notebook = self._try_get_notebook(pk)
-        serializer = NoteBookSerializer(notebook, data=request.data)
+        serializer = NoteBookSerializer(notebook, data=request.data, context={"user": request.user})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -59,6 +59,8 @@ class NoteListView(views.APIView):
 
     def get(self, request, pk):
         notes = Note.objects.filter(notebook__id=pk)
+        if not NoteBook.objects.filter(pk=pk):
+            raise Http404
         serializer = NoteSerializer(notes, many=True)
         return Response(serializer.data)
 

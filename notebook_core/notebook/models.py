@@ -1,11 +1,12 @@
 from django.db import models
-
+from user.models import User
 
 class NoteBook(models.Model):
     """
     Notebook with users notes
     """
     title = models.CharField(max_length=50)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.title

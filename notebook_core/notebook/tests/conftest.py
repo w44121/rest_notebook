@@ -11,12 +11,17 @@ def client():
 
 
 @pytest.fixture()
-def create_token(client):
+def user():
     user = User.objects.create_superuser(
         username="testuser", 
         email="test@mail.com",
-        password="testpassword"
+        password="testpassword",
     )
+    return user
+
+
+@pytest.fixture()
+def create_token(client, user):
     url = reverse("token_obtain_pair")
     response = client.post(url, {
         "username": "testuser",
