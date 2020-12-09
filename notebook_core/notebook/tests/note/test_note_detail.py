@@ -9,3 +9,5 @@ def notebook(user):
     return notebook
 
 
+# @pytest.mark.django_db
+# def test_get_note_detail_
