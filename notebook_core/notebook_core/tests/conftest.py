@@ -1,3 +1,4 @@
+from django.urls import reverse
 from user.models import User
 import pytest
 
@@ -10,3 +11,16 @@ def user():
         password="testpassword",
     )
     return user
+
+
+@pytest.fixture()
+def token(client, user):
+    url = reverse("token_obtain_pair")
+    response = client.post(url, {
+        "username": "testuser",
+        "password": "testpassword",
+    })
+    return (
+        response.data["access"],
+        response.data["refresh"],
+    )

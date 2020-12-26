@@ -29,7 +29,7 @@ def test_post_6_notebook_with_correct_jwt_no_premium_user(client, token):
     assert response.data["error"] == [ErrorDetail(string='only premium users can have more then 5 notebooks', code='invalid')]
 
 
-@pytest.mark.django_dbs
+@pytest.mark.django_db
 def test_get_notebook_list_with_random_jwt(client):
     client.credentials(HTTP_AUTHORIZATION=f"Bearer {'123'}")
     url = reverse("notebook_list_url")
