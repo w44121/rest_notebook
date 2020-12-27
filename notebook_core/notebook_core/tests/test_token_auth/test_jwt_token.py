@@ -36,4 +36,4 @@ def test_refreshs_jwt(token):
     })
     assert response.status_code == 200
     assert "access" in response.data
-    assert "refresh" not in response.data
+    assert "refresh" in response.data
