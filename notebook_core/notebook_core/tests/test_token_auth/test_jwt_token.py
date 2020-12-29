@@ -28,7 +28,7 @@ def test_jwt_token_create_user_not_in_db():
 
 
 @pytest.mark.django_db
-def test_refreshs_jwt(token):
+def test_refresh_jwt(token):
     client = APIClient()
     url = reverse("token_refresh")
     response = client.post(url, {
@@ -37,3 +37,17 @@ def test_refreshs_jwt(token):
     assert response.status_code == 200
     assert "access" in response.data
     assert "refresh" in response.data
+
+
+# not work !!!
+@pytest.mark.django_db
+def test_old_refresh_jwt(token):
+    client = APIClient()
+    url = reverse("token_refresh")
+    response = client.post(url, {
+        "refresh": token[1]
+    })
+    response = client.post(url, {
+        "refresh": token[1]
+    })
+    assert response.status_code == 401 # ??
