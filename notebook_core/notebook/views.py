@@ -1,5 +1,5 @@
 from django.http import Http404
-from rest_framework import viewsets, status, views
+from rest_framework import status, views
 from rest_framework import permissions
 from rest_framework.response import Response
 from notebook.serializers import (
@@ -39,7 +39,7 @@ class NoteBookDetailView(views.APIView):
         notebook = self._try_get_notebook(pk)
         serializer = NoteBookSerializer(notebook)
         return Response(serializer.data)
-    
+
     def put(self, request, pk):
         notebook = self._try_get_notebook(pk)
         serializer = NoteBookSerializer(notebook, data=request.data, context={"user": request.user})
@@ -84,7 +84,7 @@ class NoteDetailView(views.APIView):
     def get(self, request, pk):
         note = self._try_get_note(pk)
         serializer = NoteSerializer(note)
-        return Response(serializers.data)
+        return Response(serializer.data)
 
     def put(self, request, pk):
         note = self._try_get_note(pk)

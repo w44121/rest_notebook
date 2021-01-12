@@ -1,6 +1,6 @@
+from django.conf import settings
 from rest_framework import serializers
 from notebook.models import NoteBook
-from user.models import User
 from .models import (
     NoteBook, Note
 )
@@ -13,7 +13,7 @@ class NoteBookSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if not self.context["user"].premium:
-            if NoteBook.objects.filter(author__id=self.context["user"].id).count() < 5:
+            if NoteBook.objects.filter(author__id=self.context["user"].id).count() < settings.MAX_NOTEBOOKS_FOR_NO_PREMIUM_USERS:
                 return data
             raise serializers.ValidationError({"error": "only premium users can have more then 5 notebooks"})
         return data

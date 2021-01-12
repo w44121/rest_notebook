@@ -50,4 +50,4 @@ def test_old_refresh_jwt(token):
     response = client.post(url, {
         "refresh": token[1]
     })
-    assert response.status_code == 401 # ??
+    assert response.status_code == 401  # ??

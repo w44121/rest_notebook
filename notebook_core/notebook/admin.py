@@ -4,6 +4,6 @@ from notebook.models import (
 )
 
 
-models = [NoteBook, Note,]
+models = [NoteBook, Note, ]
 
 admin.site.register(models)
