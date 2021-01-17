@@ -5,12 +5,12 @@ from notebook.models import NoteBook
 
 
 @pytest.mark.django_db
-def test_get_detail_notebook_with_correct_jwt(client, token, notebook):
+def test_get_detail_notebook_with_correct_jwt(client, token, notebook, user):
     client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
     url = reverse("notebook_detail_url", kwargs={"pk": notebook.pk})
     response = client.get(url)
     assert response.status_code == 200
-    assert response.data == {"id": notebook.pk, "title": "test_check_notebook", "author": 1}
+    assert response.data == {"id": notebook.pk, "title": "test_check_notebook", "author": user.id}
 
 
 @pytest.mark.django_db
