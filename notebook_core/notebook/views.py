@@ -18,8 +18,10 @@ class NoteBookListView(views.APIView):
         serializer = NoteBookSerializer(notebooks, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
-        serializer = NoteBookSerializer(data=request.data, context={"user": request.user})
+    def post(self, request, many=False):
+        if isinstance(request.data, list):
+            many = True
+        serializer = NoteBookSerializer(data=request.data, context={"user": request.user}, many=many)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

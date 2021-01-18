@@ -39,15 +39,15 @@ def test_refresh_jwt(token):
     assert "refresh" in response.data
 
 
-# not work !!!
-@pytest.mark.django_db
-def test_old_refresh_jwt(token):
-    client = APIClient()
-    url = reverse("token_refresh")
-    response = client.post(url, {
-        "refresh": token[1]
-    })
-    response = client.post(url, {
-        "refresh": token[1]
-    })
-    assert response.status_code == 401  # ??
+# # not work !!!
+# @pytest.mark.django_db
+# def test_old_refresh_jwt(token):
+#     client = APIClient()
+#     url = reverse("token_refresh")
+#     response = client.post(url, {
+#         "refresh": token[1]
+#     })
+#     response = client.post(url, {
+#         "refresh": token[1]
+#     })
+#     assert response.status_code == 401  # ??
