@@ -7,6 +7,7 @@ class Tag(models.Model):
     Tag for notebook
     """
     title = models.CharField(unique=True, max_length=50)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tags", default=None)
 
     def __str__(self):
         return self.title

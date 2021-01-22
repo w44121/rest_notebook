@@ -29,3 +29,13 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = "__all__"
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = "__all__"
+
+    def validate(self, data):
+        data["author"] = self.context["user"]
+        return data

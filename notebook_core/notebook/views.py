@@ -3,10 +3,10 @@ from rest_framework import status, views
 from rest_framework import permissions
 from rest_framework.response import Response
 from notebook.serializers import (
-    NoteSerializer, NoteBookSerializer
+    NoteSerializer, NoteBookSerializer, TagSerializer,
 )
 from notebook.models import (
-    Note, NoteBook,
+    Note, NoteBook, Tag,
 )
 
 
@@ -100,3 +100,19 @@ class NoteDetailView(views.APIView):
         note = self._try_get_note(pk)
         note.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TagListView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        tags = Tag.objects.filter(author__id=request.user.id)
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = TagSerializer(data=request.data, context={"user": request.user})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
